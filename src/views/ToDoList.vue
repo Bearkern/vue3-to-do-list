@@ -167,6 +167,6 @@ export default {
   background-color: #f6f9ff;
 }
 .completedTasks {
-  background-color: #9dcc61;
+  background-color: #99ddd6;
 }
 </style>
