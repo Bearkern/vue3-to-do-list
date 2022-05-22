@@ -1,18 +1,23 @@
 <template>
   <Navbar />
+  <ToastMessage />
   <router-view />
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import ToastMessage from '@/components/ToastMessage.vue';
+import emitter from '@/utilities/emitter';
 
 export default {
-  data() {
+  provide() {
     return {
+      emitter,
     };
   },
   components: {
     Navbar,
+    ToastMessage,
   },
 };
 

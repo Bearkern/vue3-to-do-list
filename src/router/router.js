@@ -6,7 +6,7 @@ const routes = [
     component: () => import('../views/Index.vue'),
     children: [
       {
-        path: '',
+        path: '/:nickname',
         component: () => import('../views/ToDoList.vue'),
       },
       {
@@ -14,8 +14,8 @@ const routes = [
         component: () => import('../views/SignIn.vue'),
       },
       {
-        path: 'register',
-        component: () => import('../views/Register.vue'),
+        path: 'signUp',
+        component: () => import('../views/SignUp.vue'),
       },
     ],
   },

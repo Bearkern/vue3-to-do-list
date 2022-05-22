@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <Form class="offset-md-4 col-md-4" v-slot="{ errors }" @submit="signIn">
+    <h1>登入</h1>
       <div class="mb-2">
         <label for="email" class="form-label">email</label>
         <Field
@@ -37,6 +38,8 @@
 </template>
 
 <script>
+import emitter from '@/utilities/emitter';
+
 export default {
   data() {
     return {
@@ -53,15 +56,15 @@ export default {
         .then((res) => {
           const { authorization } = res.headers;
           document.cookie = `toDoToken=${authorization}`;
-          console.log(res);
-          this.$router.push('/');
+          emitter.emit('nickname', res.data.nickname);
+          this.$httpMessageState(res, '登入');
+          this.$router.push(`/${res.data.nickname}`);
         })
         .catch((err) => {
           console.dir(err);
+          this.$httpMessageState(err.response, '登入');
         });
     },
   },
 };
 </script>
-
-<style lang="scss"></style>

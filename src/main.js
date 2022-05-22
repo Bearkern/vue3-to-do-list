@@ -13,6 +13,7 @@ import VueAxios from 'vue-axios';
 
 import App from './App.vue';
 import router from './router/router';
+import httpMessageState from './utilities/pushMessageState';
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
@@ -26,6 +27,9 @@ configure({
 setLocale('zh_TW');
 
 const app = createApp(App);
+
+app.config.globalProperties.$httpMessageState = httpMessageState;
+
 app.component('Form', Form);
 app.component('Field', Field);
 app.component('ErrorMessage', ErrorMessage);

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h1>註冊帳號</h1>
-    <Form class="offset-md-4 col-md-4" v-slot="{ errors }" @submit="register">
+    <Form class="offset-md-4 col-md-4" v-slot="{ errors }" @submit="signUp">
+      <h1>註冊帳號</h1>
       <div class="mb-2">
         <label for="email" class="form-label">email</label>
         <Field
@@ -18,17 +18,14 @@
       </div>
       <div class="mb-2">
         <label for="nickname" class="form-label">暱稱</label>
-        <Field
+        <input
           id="nickname"
           name="nickname"
           type="input"
           class="form-control"
-          :class="{ 'is-invalid': errors['nickname'] }"
           placeholder="請輸入暱稱"
-          rules="required"
           v-model="user.nickname"
         />
-        <ErrorMessage name="nickname" class="invalid-feedback" />
       </div>
       <div class="mb-2">
         <label for="password" class="form-label">密碼</label>
@@ -44,6 +41,11 @@
         />
         <ErrorMessage name="password" class="invalid-feedback" />
       </div>
+      <ul v-if="errorSignUp.length">
+        <li v-for="(error, index) in errorSignUp" :key="index">
+          <p class="text-danger">{{ error }}</p>
+        </li>
+      </ul>
       <div class="text-end">
         <button type="submit" class="btn btn-primary">註冊</button>
       </div>
@@ -60,17 +62,20 @@ export default {
         nickname: '',
         password: '',
       },
+      errorSignUp: [],
     };
   },
   methods: {
-    register() {
+    signUp() {
       this.$http
         .post(`${process.env.VUE_APP_API}/users`, { user: this.user })
         .then((res) => {
-          console.log(res);
+          this.$httpMessageState(res, '註冊');
+          this.$router.push('/signIn');
         })
         .catch((err) => {
-          console.dir(err);
+          this.errorSignUp = this.errorSignUp.concat(err.response.data.error);
+          this.$httpMessageState(err.response, '註冊');
         });
     },
   },
