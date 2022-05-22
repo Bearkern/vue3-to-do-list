@@ -19,11 +19,11 @@
       <h3>開始新增待辦事項吧！</h3>
     </div>
     <div v-else>
-      <ul class="item-list w-50 mx-auto">
+      <ul v-if="toDoTasks.length" class="item-list toDoTasks w-50 mx-auto">
         <h3>To Do Tasks</h3>
         <Tasks :tasks="toDoTasks" @get-to-dos="getToDos" />
       </ul>
-      <ul class="item-list w-50 mx-auto">
+      <ul v-if="completedTasks.length" class="item-list completedTasks w-50 mx-auto">
         <h3>Completed Tasks</h3>
         <Tasks :tasks="completedTasks" @get-to-dos="getToDos" />
       </ul>
@@ -158,10 +158,15 @@ export default {
   text-decoration: line-through;
   color: gray;
 }
-
 .item-list {
   border-radius: 5px;
   padding: 20px;
-  background-color: rgb(168, 219, 231);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+.toDoTasks {
+  background-color: #f6f9ff;
+}
+.completedTasks {
+  background-color: #9dcc61;
 }
 </style>
