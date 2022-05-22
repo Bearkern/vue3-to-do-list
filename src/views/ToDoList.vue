@@ -1,6 +1,6 @@
 <template>
   <div class="container w-50">
-    <form class="row w-50 mx-auto mb-3">
+    <form class="row w-50 mx-auto mb-3 mt-4">
       <h3>Hi, {{ nickname }} 歡迎回來！</h3>
       <div class="col inputToDo">
         <input
