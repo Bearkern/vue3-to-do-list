@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Form class="offset-md-4 col-md-4" v-slot="{ errors }" @submit="signUp">
-      <h1>註冊帳號</h1>
+    <Form class="offset-md-4 col-md-4 mt-4" v-slot="{ errors }" @submit="signUp">
+      <h3>註冊帳號</h3>
       <div class="mb-2">
         <label for="email" class="form-label">email</label>
         <Field

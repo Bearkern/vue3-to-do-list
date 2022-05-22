@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Form class="offset-md-4 col-md-4" v-slot="{ errors }" @submit="signIn">
-    <h1>登入</h1>
+    <Form class="offset-md-4 col-md-4 mt-4" v-slot="{ errors }" @submit="signIn">
+      <h3>登入帳號</h3>
       <div class="mb-2">
         <label for="email" class="form-label">email</label>
         <Field
@@ -58,7 +58,7 @@ export default {
           document.cookie = `toDoToken=${authorization}`;
           emitter.emit('nickname', res.data.nickname);
           this.$httpMessageState(res, '登入');
-          this.$router.push(`/${res.data.nickname}`);
+          this.$router.push(`/toDoList/${res.data.nickname}`);
         })
         .catch((err) => {
           console.dir(err);

@@ -6,11 +6,11 @@ const routes = [
     component: () => import('../views/Index.vue'),
     children: [
       {
-        path: '/:nickname',
+        path: 'toDoList/:nickname',
         component: () => import('../views/ToDoList.vue'),
       },
       {
-        path: 'signIn',
+        path: '',
         component: () => import('../views/SignIn.vue'),
       },
       {
