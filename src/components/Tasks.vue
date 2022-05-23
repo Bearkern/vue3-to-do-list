@@ -9,7 +9,12 @@
           :true-value="task.completed_at"
           @change="toggleCompleteState(task.id)"
         />
-        <label class="form-check-label" :class="{ done: task.completed_at }" :for="task.id">
+        <label
+          v-if="currentEditId !== task.id"
+          class="form-check-label"
+          :class="{ done: task.completed_at }"
+          :for="task.id"
+        >
           {{ task.content }}
         </label>
       </div>
@@ -17,7 +22,7 @@
         :task="tempToDo"
         @update-task="updateTask"
         @cancel-edit="cancelEdit"
-        :isEdit="isEdit"
+        :isEdit="currentEditId === task.id"
       />
     </div>
     <div>
@@ -37,7 +42,7 @@ import EditTask from '@/components/EditTask.vue';
 export default {
   data() {
     return {
-      isEdit: false,
+      currentEditId: null,
       tempToDo: {},
     };
   },
@@ -59,6 +64,7 @@ export default {
         .patch(`${process.env.VUE_APP_API}/todos/${id}/toggle`)
         .then(() => {
           this.$emit('get-to-dos');
+          this.currentEditId = null;
         })
         .catch((err) => {
           console.dir(err);
@@ -66,11 +72,7 @@ export default {
         });
     },
     toggleEditState(task) {
-      if (this.isEdit) {
-        this.isEdit = false;
-      } else {
-        this.isEdit = true;
-      }
+      this.currentEditId = task.id === this.currentEditId ? null : task.id;
       this.tempToDo = { ...task };
     },
     updateTask(task) {
@@ -79,14 +81,14 @@ export default {
         .then((res) => {
           this.$httpMessageState(res);
           this.$emit('get-to-dos');
-          this.isEdit = false;
+          this.currentEditId = null;
         })
         .catch((err) => {
           this.$httpMessageState(err.response);
         });
     },
     cancelEdit() {
-      this.isEdit = false;
+      this.currentEditId = null;
     },
     deleteTask(id) {
       this.$http

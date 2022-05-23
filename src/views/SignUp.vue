@@ -54,6 +54,10 @@
 </template>
 
 <script>
+import apis from '@/api/apis';
+
+const { signUp } = apis;
+
 export default {
   data() {
     return {
@@ -67,11 +71,10 @@ export default {
   },
   methods: {
     signUp() {
-      this.$http
-        .post(`${process.env.VUE_APP_API}/users`, { user: this.user })
+      signUp(this.user)
         .then((res) => {
-          this.$httpMessageState(res, '註冊');
-          this.$router.push('/signIn');
+          this.$httpMessage(res, '註冊');
+          this.router.push('/signIn');
         })
         .catch((err) => {
           this.errorSignUp = this.errorSignUp.concat(err.response.data.error);

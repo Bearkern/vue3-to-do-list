@@ -78,50 +78,6 @@ export default {
           this.$httpMessageState(err.response, '取得資料');
         });
     },
-    toggleCompleteState(id) {
-      this.$http
-        .patch(`${process.env.VUE_APP_API}/todos/${id}/toggle`)
-        .then(() => {
-          this.getToDos();
-        })
-        .catch((err) => {
-          this.$httpMessageState(err.response);
-        });
-    },
-    toggleEditState(task) {
-      if (this.isEdit) {
-        this.isEdit = false;
-      } else {
-        this.isEdit = true;
-      }
-      this.tempToDo = { ...task };
-    },
-    updateTask(task) {
-      this.$http
-        .put(`${process.env.VUE_APP_API}/todos/${task.id}`, { todo: { content: task.content } })
-        .then((res) => {
-          this.$httpMessageState(res);
-          this.getToDos();
-          this.isEdit = false;
-        })
-        .catch((err) => {
-          this.$httpMessageState(err.response);
-        });
-    },
-    cancelEdit() {
-      this.isEdit = false;
-    },
-    deleteTask(id) {
-      this.$http
-        .delete(`${process.env.VUE_APP_API}/todos/${id}`)
-        .then((res) => {
-          this.$httpMessageState(res, '刪除');
-          this.getToDos();
-        })
-        .catch((err) => {
-          this.$httpMessageState(err.response, '刪除');
-        });
-    },
   },
   mounted() {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)toDoToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
