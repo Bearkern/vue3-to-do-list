@@ -38,6 +38,9 @@
 
 <script>
 import EditTask from '@/components/EditTask.vue';
+import apis from '@/api/apis';
+
+const { toggleCompleteState, updateTask, deleteTask } = apis;
 
 export default {
   data() {
@@ -54,16 +57,15 @@ export default {
       },
     },
   },
-  emits: ['get-to-dos'],
+  emits: ['get-tasks'],
   components: {
     EditTask,
   },
   methods: {
     toggleCompleteState(id) {
-      this.$http
-        .patch(`${process.env.VUE_APP_API}/todos/${id}/toggle`)
+      toggleCompleteState(id)
         .then(() => {
-          this.$emit('get-to-dos');
+          this.$emit('get-tasks');
           this.currentEditId = null;
         })
         .catch((err) => {
@@ -76,11 +78,10 @@ export default {
       this.tempToDo = { ...task };
     },
     updateTask(task) {
-      this.$http
-        .put(`${process.env.VUE_APP_API}/todos/${task.id}`, { todo: { content: task.content } })
+      updateTask(task)
         .then((res) => {
           this.$httpMessageState(res);
-          this.$emit('get-to-dos');
+          this.$emit('get-tasks');
           this.currentEditId = null;
         })
         .catch((err) => {
@@ -91,11 +92,10 @@ export default {
       this.currentEditId = null;
     },
     deleteTask(id) {
-      this.$http
-        .delete(`${process.env.VUE_APP_API}/todos/${id}`)
+      deleteTask(id)
         .then((res) => {
           this.$httpMessageState(res, '刪除');
-          this.$emit('get-to-dos');
+          this.$emit('get-tasks');
         })
         .catch((err) => {
           this.$httpMessageState(err.response, '刪除');

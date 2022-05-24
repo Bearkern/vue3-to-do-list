@@ -38,7 +38,9 @@
 </template>
 
 <script>
-import emitter from '@/utilities/emitter';
+import apis from '@/api/apis';
+
+const { signIn } = apis;
 
 export default {
   data() {
@@ -51,17 +53,15 @@ export default {
   },
   methods: {
     signIn() {
-      this.$http
-        .post(`${process.env.VUE_APP_API}/users/sign_in`, { user: this.user })
+      signIn(this.user)
         .then((res) => {
           const { authorization } = res.headers;
           document.cookie = `toDoToken=${authorization}`;
-          emitter.emit('nickname', res.data.nickname);
+
           this.$httpMessageState(res, '登入');
           this.$router.push(`/toDoList/${res.data.nickname}`);
         })
         .catch((err) => {
-          console.dir(err);
           this.$httpMessageState(err.response, '登入');
         });
     },

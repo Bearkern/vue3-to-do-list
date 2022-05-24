@@ -2,15 +2,15 @@
   <div class="container w-50">
     <form class="row w-50 mx-auto mb-3 mt-4">
       <h3>Hi, {{ nickname }} 歡迎回來！</h3>
-      <div class="col inputToDo">
+      <div class="col inputTask">
         <input
           type="text"
           class="form-control"
           placeholder="Add Task"
           v-model="toDo.content"
-          @keyup.enter="addToDo"
+          @keyup.enter="addTask"
         />
-        <button type="button" class="addToDo" @click="addToDo">
+        <button type="button" class="addTask" @click="addTask">
           <i class="bi bi-plus"></i>
         </button>
       </div>
@@ -21,11 +21,11 @@
     <div v-else>
       <ul v-if="toDoTasks.length" class="item-list toDoTasks w-50 mx-auto">
         <h3>To Do Tasks</h3>
-        <Tasks :tasks="toDoTasks" @get-to-dos="getToDos" />
+        <Tasks :tasks="toDoTasks" @get-tasks="getTasks" />
       </ul>
       <ul v-if="completedTasks.length" class="item-list completedTasks w-50 mx-auto">
         <h3>Completed Tasks</h3>
-        <Tasks :tasks="completedTasks" @get-to-dos="getToDos" />
+        <Tasks :tasks="completedTasks" @get-tasks="getTasks" />
       </ul>
     </div>
   </div>
@@ -34,6 +34,9 @@
 <script>
 import emitter from '@/utilities/emitter';
 import Tasks from '@/components/Tasks.vue';
+import apis from '@/api/apis';
+
+const { checkAuth, getTasks, addTask } = apis;
 
 export default {
   data() {
@@ -51,59 +54,52 @@ export default {
   },
   components: { Tasks },
   methods: {
-    addToDo() {
+    addTask() {
       if (this.toDo.content) {
-        this.$http
-          .post(`${process.env.VUE_APP_API}/todos`, { todo: this.toDo })
+        addTask(this.toDo.content)
           .then((res) => {
             this.$httpMessageState(res, '新增');
             this.toDo.content = '';
-            this.getToDos();
+            this.getTasks();
           })
           .catch((err) => {
             this.$httpMessageState(err.response, '新增');
           });
       }
     },
-    getToDos() {
-      this.$http
-        .get(`${process.env.VUE_APP_API}/todos`)
+    getTasks() {
+      getTasks()
         .then((res) => {
           this.toDos = res.data.todos;
           this.toDoTasks = this.toDos.filter((task) => !task.completed_at);
           this.completedTasks = this.toDos.filter((task) => task.completed_at);
         })
         .catch((err) => {
-          console.dir(err);
           this.$httpMessageState(err.response, '取得資料');
         });
     },
   },
   mounted() {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)toDoToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-    this.$http.defaults.headers.common.Authorization = token;
-
-    this.$http
-      .get(`${process.env.VUE_APP_API}/check`)
+    checkAuth()
       .then((res) => {
         emitter.emit('check-sign-in');
         this.$httpMessageState(res, '驗證');
         this.nickname = this.$route.params.nickname;
+        this.getTasks();
       })
       .catch((err) => {
-        this.$httpMessageState(err.response);
+        this.$httpMessageState(err.response, '驗證');
         this.$router.push('/signIn');
       });
-    this.getToDos();
   },
 };
 </script>
 
 <style lang="scss">
-.inputToDo {
+.inputTask {
   position: relative;
 }
-.addToDo {
+.addTask {
   position: absolute;
   border: none;
   background: transparent;

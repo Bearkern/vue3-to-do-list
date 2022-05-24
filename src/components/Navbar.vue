@@ -19,6 +19,9 @@
 
 <script>
 import emitter from '@/utilities/emitter';
+import apis from '@/api/apis';
+
+const { signOut } = apis;
 
 export default {
   data() {
@@ -29,8 +32,8 @@ export default {
   methods: {
     signOut() {
       this.signInState = false;
-      this.$http
-        .delete(`${process.env.VUE_APP_API}/users/sign_out`)
+
+      signOut()
         .then((res) => {
           this.$httpMessageState(res, '登出');
           this.$router.push('/signIn');

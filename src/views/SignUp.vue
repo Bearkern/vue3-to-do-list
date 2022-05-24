@@ -73,8 +73,8 @@ export default {
     signUp() {
       signUp(this.user)
         .then((res) => {
-          this.$httpMessage(res, '註冊');
-          this.router.push('/signIn');
+          this.$httpMessageState(res, '註冊');
+          this.$router.push('/signIn');
         })
         .catch((err) => {
           this.errorSignUp = this.errorSignUp.concat(err.response.data.error);
