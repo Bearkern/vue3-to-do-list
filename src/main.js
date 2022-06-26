@@ -14,6 +14,7 @@ import VueAxios from 'vue-axios';
 import App from './App.vue';
 import router from './router/router';
 import httpMessageState from './utilities/pushMessageState';
+import store from './store/store';
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
@@ -36,5 +37,6 @@ app.component('ErrorMessage', ErrorMessage);
 
 app.use(VueAxios, axios);
 app.use(router);
+app.use(store);
 
 app.mount('#app');

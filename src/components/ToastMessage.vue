@@ -25,29 +25,14 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
-  data() {
-    return {
-      messages: [],
-    };
-  },
-  inject: ['emitter'],
   methods: {
-    showToast() {
-      setTimeout(() => {
-        this.messages.shift();
-      }, 6000);
-    },
-    hideToast(index) {
-      this.messages.splice(index, 1);
-    },
+    ...mapActions('toastMessage', ['showToast', 'hideToast']),
   },
-  mounted() {
-    this.emitter.on('push-message', (message) => {
-      const { style = 'success', title, content } = message;
-      this.messages.push({ style, title, content });
-      this.showToast();
-    });
+  computed: {
+    ...mapState('toastMessage', ['messages']),
   },
 };
 </script>

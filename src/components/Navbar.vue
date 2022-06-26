@@ -18,20 +18,15 @@
 </template>
 
 <script>
-import emitter from '@/utilities/emitter';
+import { mapState } from 'vuex';
 import apis from '@/api/apis';
 
 const { signOut } = apis;
 
 export default {
-  data() {
-    return {
-      signInState: false,
-    };
-  },
   methods: {
     signOut() {
-      this.signInState = false;
+      this.$store.dispatch('updateSignInState', false);
 
       signOut()
         .then((res) => {
@@ -43,10 +38,8 @@ export default {
         });
     },
   },
-  mounted() {
-    emitter.on('check-sign-in', () => {
-      this.signInState = true;
-    });
+  computed: {
+    ...mapState(['signInState']),
   },
 };
 </script>

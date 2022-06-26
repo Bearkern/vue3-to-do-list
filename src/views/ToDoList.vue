@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import emitter from '@/utilities/emitter';
 import Tasks from '@/components/Tasks.vue';
 import apis from '@/api/apis';
 
@@ -82,7 +81,8 @@ export default {
   mounted() {
     checkAuth()
       .then((res) => {
-        emitter.emit('check-sign-in');
+        this.$store.dispatch('updateSignInState', true);
+
         this.$httpMessageState(res, '驗證');
         this.nickname = this.$route.params.nickname;
         this.getTasks();
